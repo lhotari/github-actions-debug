@@ -5,5 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Start HTTP proxy for Github artifact cache
+      uses: cirruslabs/http-cache-action@master
     - name: Setup upterm ssh session
       uses: lhotari/action-upterm@main
