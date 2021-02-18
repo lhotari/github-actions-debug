@@ -28,6 +28,15 @@ jobs:
         env:
           MATRIX_CONTEXT: ${{ toJSON(matrix) }}
         run: echo "$MATRIX_CONTEXT"
+  playground:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Experiment error
+        run: |
+          echo '::error ::Hello world! error'
+      - name: Experiment warning
+        run: |
+          echo '::warning ::Hello world! warning'
   build:
     runs-on: ubuntu-latest
     steps:
