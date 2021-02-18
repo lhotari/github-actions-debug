@@ -2,7 +2,7 @@ name: CI
 on: [push]
 jobs:
   dump_contexts:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Dump GitHub context
         env:
@@ -29,7 +29,7 @@ jobs:
           MATRIX_CONTEXT: ${{ toJSON(matrix) }}
         run: echo "$MATRIX_CONTEXT"
   playground:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Experiment error
         run: |
@@ -38,7 +38,7 @@ jobs:
         run: |
           echo '::warning ::Hello world! warning'
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
     - name: Start HTTP proxy for Github artifact cache
