@@ -47,6 +47,6 @@ jobs:
         java-version: 8
     - name: Setup upterm ssh session
       uses: lhotari/action-upterm@main
-      with:
-        limit-access-to-actor: true
-        limit-access-to-users: lhotari,lhotari
+#      with:
+#        limit-access-to-actor: true
+#        limit-access-to-users: lhotari,lhotari
