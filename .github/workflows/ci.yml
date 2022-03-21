@@ -45,6 +45,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 8
+    - uses: lhotari/http-cache-action@lh-fix-build
     - name: Setup upterm ssh session
       uses: lhotari/action-upterm@dev
       with:
