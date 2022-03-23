@@ -9,8 +9,8 @@ jobs:
         include:
           - name: Ubuntu
             runs-on: ubuntu-latest
-          - name: MacOS
-            runs-on: macos-latest
+          #- name: MacOS
+          #  runs-on: macos-latest
     runs-on: ${{ matrix.runs-on }}
     steps:
     - uses: actions/checkout@v2
@@ -18,10 +18,11 @@ jobs:
       #uses: lhotari/action-upterm@dev
       uses: ./.github/actions/ssh-access
       with:
-        limit-access-to-actor: true
-        limit-access-to-users: lhotari,lhotari
+        secure-access: false
+        #limit-access-to-actor: true
+        #limit-access-to-users: lhotari,lhotari
     - name: Wait for ssh connection
       uses: ./.github/actions/ssh-access
       with:
         action: wait
-        timeout: 30
+        timeout: 120

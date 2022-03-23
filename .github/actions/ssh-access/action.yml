@@ -32,9 +32,14 @@ inputs:
     required: false
     default: 'false'
   limit-access-to-users:
-    description: 'If only the public SSH keys of the listed GitHub users should be authorized'
+    description: 'If only the public SSH keys of the listed GitHub users should be authorized. Comma separate list of GitHub user names.'
     required: false
     default: ''
+  secure-access:
+    description: |
+      If set to true, won't allow public access when limit-access-to-actor or limit-access-to-users is unset.
+    required: false
+    default: 'true'
   timeout:
     description: 'When action=wait, the timeout in seconds to wait for the user to connect'
     required: false
@@ -82,6 +87,9 @@ runs:
             cat <(cat ~/.ssh/known_hosts | awk '{ print "@cert-authority * " $2 " " $3 }') >> ~/.ssh/known_hosts
             authorizedKeysParameter=""
             authorizedKeysFile=${HOME}/.ssh/authorized_keys
+            if [[ "${{ inputs.secure-access }}" != "false" ]]; then
+                touch $authorizedKeysFile
+            fi
             limit_access_to_actor="${{ inputs.limit-access-to-actor }}"
             if [[ "${limit_access_to_actor}" == "true" ]]; then
                 echo "Adding ${GITHUB_ACTOR} to allowed users (identified by ssh key registered in GitHub)"
