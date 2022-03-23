@@ -88,7 +88,9 @@ runs:
             authorizedKeysParameter=""
             authorizedKeysFile=${HOME}/.ssh/authorized_keys
             if [[ "${{ inputs.secure-access }}" != "false" ]]; then
-                touch $authorizedKeysFile
+                ssh-keygen -q -t ed25519 -N "$(echo $RANDOM | md5sum | awk '{ print $1 }')" -C "Prevent public access" -f /tmp/dummykey$$
+                cat /tmp/dummykey$$.pub >> $authorizedKeysFile
+                rm /tmp/dummykey$$ /tmp/dummykey$$.pub
             fi
             limit_access_to_actor="${{ inputs.limit-access-to-actor }}"
             if [[ "${limit_access_to_actor}" == "true" ]]; then

@@ -17,8 +17,8 @@ jobs:
     - name: Setup upterm ssh session
       #uses: lhotari/action-upterm@dev
       uses: ./.github/actions/ssh-access
-      with:
-        secure-access: false
+      #with:
+        #secure-access: true
         #limit-access-to-actor: true
         #limit-access-to-users: lhotari,lhotari
     - name: Wait for ssh connection
