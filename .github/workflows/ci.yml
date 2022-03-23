@@ -20,3 +20,6 @@ jobs:
       with:
         limit-access-to-actor: true
         limit-access-to-users: lhotari,lhotari
+    - run: |
+        echo "Waiting 120 seconds"
+        sleep 120
