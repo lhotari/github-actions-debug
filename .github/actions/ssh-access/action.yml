@@ -53,6 +53,8 @@ runs:
         fi
         echo '::endgroup::'  
         echo "::group::Configuring ssh and ssh keys"
+        echo "whoami $(whoami)"
+        printenv
         # generate ssh key
         mkdir -p ~/.ssh
         chmod 0600 ~/.ssh
