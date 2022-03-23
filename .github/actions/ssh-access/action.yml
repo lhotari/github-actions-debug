@@ -63,29 +63,29 @@ runs:
             ssh-keygen -q -t ed25519 -N "" -f ~/.ssh/id_ed25519
         fi
         # configure ssh
-        echo "Host *\nStrictHostKeyChecking no\nCheckHostIP no\n" +
-        "TCPKeepAlive yes\nServerAliveInterval 30\nServerAliveCountMax 180\nVerifyHostKeyDNS yes\nUpdateHostKeys yes\n" > ~/.ssh/config
+        echo -e "Host *\nStrictHostKeyChecking no\nCheckHostIP no\nTCPKeepAlive yes\nServerAliveInterval 30\nServerAliveCountMax 180\nVerifyHostKeyDNS yes\nUpdateHostKeys yes\n" > ~/.ssh/config
         # Auto-generate ~/.ssh/known_hosts by attempting connection to uptermd.upterm.dev  
-        ssh -i ~/.ssh/id_ed25519 uptermd.upterm.dev
+        ssh -i ~/.ssh/id_ed25519 uptermd.upterm.dev || true
         # @cert-authority entry is a mandatory entry when connecting to upterm. generate the entry based on the known_hosts entry key
-        cat <(cat ~/.ssh/known_hosts | awk \'{ print "@cert-authority * " $2 " " $3 }\') >> ~/.ssh/known_hosts
-        local authorizedKeysParameter=""
-        local authorizedKeysFile=${HOME}/.ssh/authorized_keys
+        cat <(cat ~/.ssh/known_hosts | awk '{ print "@cert-authority * " $2 " " $3 }') >> ~/.ssh/known_hosts
+        authorizedKeysParameter=""
+        authorizedKeysFile=${HOME}/.ssh/authorized_keys
         limit_access_to_actor="${{ inputs.limit-access-to-actor }}"
         if [[ "${limit_access_to_actor}" == "true" ]]; then
             echo "Adding ${GITHUB_ACTOR} to allowed users (identified by ssh key registered in GitHub)"
             curl -s https://github.com/${GITHUB_ACTOR}.keys >> $authorizedKeysFile
         fi
-        for github_user in "${{ inputs.limit-access-to-users }}"; do
+        limit_access_to_users="${{ inputs.limit-access-to-users }}"
+        for github_user in ${limit_access_to_users//,/ }; do
             if [[ -n "${github_user}" ]]; then
                 echo "Adding ${github_user} to allowed users (identified by ssh key registered in GitHub)"
                 curl -s https://github.com/${github_user}.keys >> $authorizedKeysFile
             fi
-        fi
+        done
         if [ -f $authorizedKeysFile ]; then
             chmod 0600 $authorizedKeysFile
             authorizedKeysParameter="-a $authorizedKeysFile"
-            echo "Using $authorizedKeysFile\nContent:\n---------------------------"
+            echo -e "Using $authorizedKeysFile\nContent:\n---------------------------"
             cat $authorizedKeysFile
             echo "---------------------------"
         fi
@@ -98,8 +98,7 @@ runs:
         tmux set -t upterm-wrapper window-size largest
         tmux set -t upterm window-size largest
         echo '::endgroup::'  
-        echo "::group::SSH connection information"
+        echo -e "\nSSH connection information"
         shopt -s nullglob
         upterm session current --admin-socket ~/.upterm/*.sock
-        echo '::endgroup::'
       shell: bash
