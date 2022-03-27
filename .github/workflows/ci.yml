@@ -16,12 +16,12 @@ jobs:
     - uses: actions/checkout@v2
     - uses: lhotari/gh-actions-artifact-client/export-actions-env-action@master
     - name: Setup upterm ssh session
-      #uses: lhotari/action-upterm@dev
-      uses: ./.github/actions/ssh-access
+      uses: lhotari/action-upterm@dev
+      #uses: ./.github/actions/ssh-access
       with:
         limit-access-to-actor: true
-    - name: Wait for ssh connection
-      uses: ./.github/actions/ssh-access
-      with:
-        action: wait
-        timeout: 120
+#    - name: Wait for ssh connection
+#      uses: ./.github/actions/ssh-access
+#      with:
+#        action: wait
+#        timeout: 120
